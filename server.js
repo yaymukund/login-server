@@ -35,5 +35,13 @@ app.post('/authenticate', function(req, res) {
   });
 });
 
-app.use(express.static('public'));
+app.get('/login', function(req, res) {
+  if (req.session.isLoggedIn) {
+    res.redirect('/');
+    return;
+  }
+
+  res.sendFile('login.html', { root: __dirname });
+});
+
 app.listen(3001);
