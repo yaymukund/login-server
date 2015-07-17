@@ -8,7 +8,7 @@ var bcrypt = require('bcrypt'),
 var app = express();
 
 app.use(session({
-  cookie: { maxAge: 1000 * 60 * 24 * 7 },
+  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
   store: new FileStore(),
   secret: config.session_secret
 }));
