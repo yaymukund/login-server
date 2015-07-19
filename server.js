@@ -3,14 +3,15 @@ var bcrypt = require('bcrypt'),
     config = require('./.config'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
-    FileStore = require('session-file-store')(session);
+    FileStore = require('session-file-store')(session),
+    TTL_SECONDS = 60 * 60 * 24 * 7;
 
 var app = express();
 
 app.use(session({
-  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
+  cookie: { maxAge: 1000 * TTL_SECONDS },
   saveUninitialized: false,
-  store: new FileStore(),
+  store: new FileStore({ ttl: TTL_SECONDS }),
   secret: config.session_secret
 }));
 
