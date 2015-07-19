@@ -28,7 +28,9 @@ app.get('/session', function(req, res) {
 });
 
 app.post('/authenticate', function(req, res) {
+  console.log('authenticating.. received body');
   login(req.body.password, function(success) {
+    console.log('validated password ' + success);
     if (!success) {
       res.sendStatus(401);
     } else {
