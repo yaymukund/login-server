@@ -15,8 +15,6 @@ app.use(session({
   secret: config.session_secret
 }));
 
-app.use(bodyParser.urlencoded());
-
 var login = function(password, done) {
   bcrypt.compare(password, config.password_digest, function(err, res) {
     return done(!!res);
@@ -27,7 +25,7 @@ app.get('/session', function(req, res) {
   res.sendStatus(!!req.session.isLoggedIn ? 200 : 403);
 });
 
-app.post('/authenticate', function(req, res) {
+app.post('/authenticate', bodyParser.urlencoded(), function(req, res) {
   console.log('authenticating.. received body');
   login(req.body.password, function(success) {
     console.log('validated password ' + success);
