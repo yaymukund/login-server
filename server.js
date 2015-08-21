@@ -10,6 +10,7 @@ var app = express();
 
 app.use(session({
   cookie: { maxAge: 1000 * TTL_SECONDS },
+  resave: false,
   saveUninitialized: false,
   store: new FileStore({ ttl: TTL_SECONDS }),
   secret: config.session_secret
@@ -21,14 +22,17 @@ var login = function(password, done) {
   });
 };
 
+app.use(function(req, res, next) {
+  console.log('%s %s %s', req.method, req.url, req.path);
+  next();
+});
+
 app.get('/session', function(req, res) {
   res.sendStatus(!!req.session.isLoggedIn ? 200 : 403);
 });
 
-app.post('/authenticate', bodyParser.urlencoded(), function(req, res) {
-  console.log('authenticating.. received body');
+app.post('/authenticate', bodyParser.urlencoded({ extended: false }), function(req, res) {
   login(req.body.password, function(success) {
-    console.log('validated password ' + success);
     if (!success) {
       res.sendStatus(401);
     } else {
